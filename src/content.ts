@@ -1,4 +1,5 @@
 import { SSOClient, ListAccountsCommand } from "@aws-sdk/client-sso";
+import { formatRemainingTime } from "./util/unixTimestamp";
 
 const cookies = document.cookie.split("; ");
 
@@ -38,17 +39,6 @@ interface UserInformation {
   userIdentifier: string;
 }
 
-function formatRemainingTime(expireDate: number): string {
-  const currentDate = new Date().getTime();
-  const remainingMilliseconds = expireDate - currentDate;
-
-  const seconds = Math.floor((remainingMilliseconds / 1000) % 60);
-  const minutes = Math.floor((remainingMilliseconds / (1000 * 60)) % 60);
-  const hours = Math.floor((remainingMilliseconds / (1000 * 60 * 60)) % 24);
-
-  return `${hours} hours, ${minutes} minutes, and ${seconds} seconds`;
-}
-
 try {
   const userData: UserInformation = await fetch(url, requestOptions).then(
     (response) => {
@@ -56,8 +46,11 @@ try {
     },
   );
 
-  const remainingTime = formatRemainingTime(userData.expireDate);
-  console.log("Remaining time until expiry:", remainingTime);
+  const { hours, minutes, seconds } = formatRemainingTime(userData.expireDate);
+
+  console.log(
+    `Remaining time until expiry: ${hours} hours, ${minutes} minutes with ${seconds} seconds`,
+  );
 
   const client = new SSOClient({
     region,

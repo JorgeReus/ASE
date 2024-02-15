@@ -5,7 +5,7 @@
   "action": { "default_popup": "index.html" },
   "content_scripts": [
     {
-      "js": ["src/content.ts"],
+      "js": ["src/content.ts", "src/ssoInfo.tsx"],
       "matches": ["https://*.awsapps.com/*"]
     }
   ]
