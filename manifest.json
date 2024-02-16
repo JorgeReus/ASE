@@ -1,11 +1,11 @@
 {
   "manifest_version": 3,
-  "name": "CRXJS Solid Vite Example",
-  "version": "1.0.0",
+  "name": "AWS SSO Enhance",
+  "version": "0.0.1",
   "action": { "default_popup": "index.html" },
   "content_scripts": [
     {
-      "js": ["src/content.ts", "src/ssoInfo.tsx"],
+      "js": ["src/content/ssoInfo.tsx"],
       "matches": ["https://*.awsapps.com/*"]
     }
   ]
