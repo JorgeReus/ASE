@@ -12,3 +12,7 @@ export function formatRemainingTime(expireDate: number) {
     seconds,
   };
 }
+
+export function unixTimestampToMinutes(expireDate: number) {
+  return expireDate / 60;
+}

@@ -3,7 +3,8 @@ import { render } from 'solid-js/web';
 import { AwsSso } from "../util/sso";
 import { createSignal, onCleanup } from 'solid-js';
 import { waitForElement } from '../util/ui';
-import { formatRemainingTime } from '../util/unixTimestamp';
+import { formatRemainingTime, unixTimestampToMinutes } from '../util/unixTimestamp';
+import { createExpireAlarm, createExpireNotification } from '../util/chrome';
 
 const SSO_DIVIDER_ID= "sso-enhance-expiration-divider"
 const SSO_SPAN_ID="sso-enhance-expiration-span"
@@ -34,7 +35,22 @@ try {
     document.head,
     window.location.hostname,
   );
+
   let userData = await sso.whoAmI();
+
+  let expMinutes = unixTimestampToMinutes(userData.expireDate)
+
+  let request: CreateAlarmRequest = {
+    action: "createAlarm",
+    data: {
+      delayInMinutes: expMinutes,
+      ssoStartUrl: sso.ssoStartUrl
+    }
+  }
+
+  const response: CreateAlarmResponse = await chrome.runtime.sendMessage(request);
+  console.log(response.action);
+
   function Component() {
     const [expiryTime, setExpiryTime] = createSignal(userData.expireDate);
 

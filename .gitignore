@@ -1,4 +1,4 @@
 node_modules
 .vite/
 dist
-
+vite.config.ts.timestamp-*
